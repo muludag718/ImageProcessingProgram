@@ -116,5 +116,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 **YOUR NAME**
 
-* GitHub: `[github.com/YOUR_USERNAME](https://github.com/YOUR_USERNAME)`
-* LinkedIn: `[linkedin.com/in/YOUR_PROFILE](https://linkedin.com/in/YOUR_PROFILE)`
+* GitHub: `[github.com/muludag718](https://github.com/muludag718)`
