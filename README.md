@@ -9,14 +9,6 @@ An advanced image processing application built with C# and Windows Forms, focusi
 
 ---
 
-## 📸 Screenshot
-
-***(Important: Replace the image below with a real screenshot of your application!)***
-
-![Screenshot of PixelCraft](https://i.imgur.com/x5zUa2p.png) 
-*A preview of the user interface, showing the original and processed images side-by-side.*
-
----
 
 ## ✨ Features
 
@@ -75,7 +67,7 @@ This project was built to showcase modern C#/.NET 8 capabilities for high-perfor
 
 1.  Clone the repository to your local machine:
     ```bash
-    git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git)
+    git clone [https://github.com/muludag718/ImageProcessingProgram.git](https://github.com/muludag718/ImageProcessingProgram.git)
     ```
 2.  Open the `.sln` solution file in Visual Studio.
 3.  Build the solution (this will restore NuGet packages if any were added).
