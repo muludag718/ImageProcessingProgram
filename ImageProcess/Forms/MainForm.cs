@@ -152,9 +152,9 @@ public partial class MainForm : Form
 
 
 
-        // 3. Sonucu _processedImage'den alıp göster.
-        pictureBoxProcessed.Image = await Task.Run(() => Exam.AddNoise(pictureBoxOriginal.Image));
+        //// 3. Sonucu _processedImage'den alıp göster.
+        //pictureBoxProcessed.Image = await Task.Run(() => Exam.AddNoise(pictureBoxOriginal.Image));
 
-        this.Cursor = Cursors.Default;
+        //this.Cursor = Cursors.Default;
     }
 }
