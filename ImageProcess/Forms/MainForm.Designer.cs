@@ -41,7 +41,7 @@
             splitContainer1 = new SplitContainer();
             pictureBoxOriginal = new PictureBox();
             pictureBoxProcessed = new PictureBox();
-            laplacian3x3ToolStripMenuItem = new ToolStripMenuItem();
+            PnlChild = new Panel();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -53,10 +53,10 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { açToolStripMenuItem, filtrelerToolStripMenuItem, yardımToolStripMenuItem, laplacian3x3ToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { açToolStripMenuItem, filtrelerToolStripMenuItem, yardımToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.Size = new Size(984, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -70,26 +70,26 @@
             // açToolStripMenuItem1
             // 
             açToolStripMenuItem1.Name = "açToolStripMenuItem1";
-            açToolStripMenuItem1.Size = new Size(141, 22);
+            açToolStripMenuItem1.Size = new Size(180, 22);
             açToolStripMenuItem1.Text = "Aç...";
-            açToolStripMenuItem1.Click += açToolStripMenuItem1_Click;
+            açToolStripMenuItem1.Click += AçToolStripMenuItem1_Click;
             // 
             // farklıKaydetToolStripMenuItem
             // 
             farklıKaydetToolStripMenuItem.Name = "farklıKaydetToolStripMenuItem";
-            farklıKaydetToolStripMenuItem.Size = new Size(141, 22);
+            farklıKaydetToolStripMenuItem.Size = new Size(180, 22);
             farklıKaydetToolStripMenuItem.Text = "Farklı Kaydet";
-            farklıKaydetToolStripMenuItem.Click += farklıKaydetToolStripMenuItem_Click;
+            farklıKaydetToolStripMenuItem.Click += FarklıKaydetToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(138, 6);
+            toolStripSeparator1.Size = new Size(177, 6);
             // 
             // çıkışToolStripMenuItem
             // 
             çıkışToolStripMenuItem.Name = "çıkışToolStripMenuItem";
-            çıkışToolStripMenuItem.Size = new Size(141, 22);
+            çıkışToolStripMenuItem.Size = new Size(180, 22);
             çıkışToolStripMenuItem.Text = "Çıkış";
             çıkışToolStripMenuItem.Click += çıkışToolStripMenuItem_Click;
             // 
@@ -122,8 +122,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(pictureBoxProcessed);
-            splitContainer1.Size = new Size(800, 426);
-            splitContainer1.SplitterDistance = 400;
+            splitContainer1.Size = new Size(784, 426);
+            splitContainer1.SplitterDistance = 391;
             splitContainer1.TabIndex = 1;
             // 
             // pictureBoxOriginal
@@ -131,7 +131,7 @@
             pictureBoxOriginal.Dock = DockStyle.Fill;
             pictureBoxOriginal.Location = new Point(0, 0);
             pictureBoxOriginal.Name = "pictureBoxOriginal";
-            pictureBoxOriginal.Size = new Size(400, 426);
+            pictureBoxOriginal.Size = new Size(391, 426);
             pictureBoxOriginal.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxOriginal.TabIndex = 0;
             pictureBoxOriginal.TabStop = false;
@@ -141,24 +141,26 @@
             pictureBoxProcessed.Dock = DockStyle.Fill;
             pictureBoxProcessed.Location = new Point(0, 0);
             pictureBoxProcessed.Name = "pictureBoxProcessed";
-            pictureBoxProcessed.Size = new Size(396, 426);
+            pictureBoxProcessed.Size = new Size(389, 426);
             pictureBoxProcessed.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxProcessed.TabIndex = 1;
             pictureBoxProcessed.TabStop = false;
             // 
-            // laplacian3x3ToolStripMenuItem
+            // PnlChild
             // 
-            laplacian3x3ToolStripMenuItem.Name = "laplacian3x3ToolStripMenuItem";
-            laplacian3x3ToolStripMenuItem.Size = new Size(86, 20);
-            laplacian3x3ToolStripMenuItem.Text = "Laplacian3x3";
-            laplacian3x3ToolStripMenuItem.Click += laplacian3x3ToolStripMenuItem_Click;
+            PnlChild.Dock = DockStyle.Right;
+            PnlChild.Location = new Point(784, 24);
+            PnlChild.Name = "PnlChild";
+            PnlChild.Size = new Size(200, 426);
+            PnlChild.TabIndex = 2;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(984, 450);
             Controls.Add(splitContainer1);
+            Controls.Add(PnlChild);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
@@ -191,6 +193,6 @@
         private ToolStripMenuItem çıkışToolStripMenuItem;
         private ToolStripMenuItem filtrelerToolStripMenuItem;
         private ToolStripMenuItem yardımToolStripMenuItem;
-        private ToolStripMenuItem laplacian3x3ToolStripMenuItem;
+        private Panel PnlChild;
     }
 }

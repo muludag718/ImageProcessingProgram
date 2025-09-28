@@ -2,6 +2,7 @@
 using ImageProcess.Core;
 using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
+using ImageProcess.Filters.Settings;
 
 namespace ImageProcess.Filters;
 
@@ -11,22 +12,18 @@ public struct ContrastFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 
     public readonly string Category => "Filter";
 
+    public ContrastSetting Settings { get; private set; }
 
+    public ContrastFilter() => Settings = new();
 
-    //public ContrastFilter(double contrastFactor)
-    //{
-    //    this.ContrastFactor = contrastFactor;
-    //}
-
-    public void Execute(AdvancedBitmap<Rgba32> image)
+    public readonly void Execute(AdvancedBitmap<Rgba32> image)
     {
         image.ProcessRows(this);
     }
 
-    public void ProcessRow(Span<Rgba32> row)
+    public readonly void ProcessRow(Span<Rgba32> row)
     {
-        double ContrastFactor = 25;
-        double factor = (255.0 + ContrastFactor) / 255.0;
+        double factor = (255.0 + Settings.ContrastFactory) / 255.0;
 
         for (int x = 0; x < row.Length; x++)
         {

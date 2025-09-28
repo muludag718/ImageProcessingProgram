@@ -14,18 +14,59 @@ public partial class MainForm : Form
     // Projede bulunan, uygulanabilir tüm filtrelerin listesi.
     private List<IFilter<Rgba32>> availableFilters = [];
 
+    private const int ExpandedSize = 1000;
+    private const int CollapsedSize = 1200;
+
+
     public MainForm()
     {
         InitializeComponent();
+        this.Width = 800;
+        PnlChild.Width = 0;
     }
 
 
     private void MainForm_Load(object sender, EventArgs e)
     {
-        // 1. Projedeki tüm filtreleri otomatik olarak bul.
         DiscoverFilters();
-        // 2. Bulunan bu filtrelerle "Filtreler" menüsünü dinamik olarak oluştur.
         BuildFilterMenu();
+
+    }
+
+    private Task<DialogResult> OpenChildForm(object? settingsObject = null)
+    {
+        var tcs = new TaskCompletionSource<DialogResult>();
+
+        this.Width = 1000;
+        PnlChild.Width = 200;
+        var childForm = new SettingsForm(settingsObject)
+        {
+            TopLevel = false,
+            FormBorderStyle = FormBorderStyle.None,
+            Dock = DockStyle.Fill
+        };
+
+        // Form kapandığında ne olacağını belirliyoruz.
+        childForm.FormClosed += (sender, e) =>
+        {
+            this.Width = 800;
+            PnlChild.Width = 0;
+            tcs.SetResult(childForm.DialogResult);
+        };
+
+        this.PnlChild.Controls.Clear();
+        this.PnlChild.Controls.Add(childForm);
+        this.PnlChild.Tag = childForm;
+        childForm.BringToFront();
+        childForm.Show();
+
+        return tcs.Task;
+    }
+
+    private void ChildForm_FormClosed(object? sender, FormClosedEventArgs e)
+    {
+        this.Width = 800;
+        PnlChild.Width = 0;
     }
 
     private void BuildFilterMenu()
@@ -68,9 +109,20 @@ public partial class MainForm : Form
         var filter = menuItem.Tag as IOperation<Rgba32>;
         if (filter == null) return;
 
-        // --- YENİ MANTIK BURADA BAŞLIYOR ---
+        var settingsProperty = filter.GetType().GetProperty("Settings");
 
-        // 1. Her filtreye tıklamadan önce, çalışma tezgahını orijinal resmin temiz bir kopyasıyla sıfırla.
+        if (settingsProperty != null)
+        {
+            // Eğer "Settings" özelliği varsa, ayar nesnesini al.
+            object? settingsObject = settingsProperty.GetValue(filter);
+
+            var result = await OpenChildForm(settingsObject);
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+        }
         processedImage?.Dispose();
         processedImage = (AdvancedBitmap<Rgba32>)originalImage.Clone();
 
@@ -92,7 +144,7 @@ public partial class MainForm : Form
             .Select(t => (IFilter<Rgba32>) Activator.CreateInstance(t))];
     }
 
-    private void açToolStripMenuItem1_Click(object sender, EventArgs e)
+    private void AçToolStripMenuItem1_Click(object sender, EventArgs e)
     {
         if (openFileDialog.ShowDialog() == DialogResult.OK)
         {
@@ -121,7 +173,7 @@ public partial class MainForm : Form
                   { -1, -1, -1,  }, };
         }
     }
-    private void farklıKaydetToolStripMenuItem_Click(object sender, EventArgs e)
+    private void FarklıKaydetToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (pictureBoxProcessed.Image == null)
         {
