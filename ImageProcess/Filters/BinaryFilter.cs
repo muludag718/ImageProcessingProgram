@@ -9,9 +9,9 @@ public struct BinaryFilter : IFilter<Rgba32>
     public readonly string Name => "Binary";
     public readonly string Category => "Renk Ayarları";
 
-    public readonly void Execute(AdvancedBitmap<Rgba32> image)
+    public readonly void Execute(ProcessContext<Rgba32> context)
     {
-
+        var image = context.SourceImage;
         int sum = 0;
         for (int y = 0; y < image.Height; y++)
         {
@@ -48,10 +48,6 @@ public struct BinaryFilter : IFilter<Rgba32>
 
             }
         }
-
-
     }
-
-
 }
 

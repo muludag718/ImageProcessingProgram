@@ -1,13 +1,8 @@
 ﻿using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
-using System;
 using System.Buffers;
-using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ImageProcess.Core;
 
@@ -25,54 +20,46 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
 
     public int Width { get; private set; }
 
-    // Görüntünün yüksekliği (sadece okunabilir).
     public int Height { get; private set; }
-
-    // Kuyrukta bekleyen işlem olup olmadığını gösteren özellik.
+    // Property that indicates whether there is a process waiting in the queue.
     public bool HasPendingChanges => operationQueue.Count > 0;
 
 
     /// <summary>
-    /// Belirtilen dosya yolundan bir görüntü yükleyerek yeni bir AdvancedBitmap nesnesi oluşturur.
+    /// Creates a new AdvancedBitmap object by loading an image from the specified file path.
     /// </summary>
-    /// <param name="filePath">Görüntü dosyasının yolu.</param>
+    /// <param name="filePath">Path to the image file.</param>
     public AdvancedBitmap(string filePath)
     {
-        // 'using' ifadesi, standart Bitmap nesnesinin işimiz bittiğinde
-        // bellekten düzgün bir şekilde temizlenmesini garanti eder.
         using var bmp = new Bitmap(filePath);
-
-        // Asıl yükleme işini yapacak olan (henüz yazmadığımız)
-        // ana metodumuzu çağırıyoruz.
         LoadFromBitmap(bmp);
     }
 
     /// <summary>
-    /// Mevcut bir Bitmap nesnesinden veri alarak yeni bir AdvancedBitmap nesnesi oluşturur.
+    /// Creates a new AdvancedBitmap object by taking data from an existing Bitmap object.
     /// </summary>
-    /// <param name="sourceBitmap">Kaynak Bitmap nesnesi.</param>
+    /// <param name="sourceBitmap">Source Bitmap object.</param>
     public AdvancedBitmap(Bitmap sourceBitmap)
     {
-        // Gelen Bitmap nesnesini doğrudan ana yükleyici metodumuza iletiyoruz.
         LoadFromBitmap(sourceBitmap);
     }
 
     /// <summary>
-    /// Belirtilen boyutlarda boş bir AdvancedBitmap tuvali oluşturan özel kurucu metot.
-    /// Bu metot, sınıfın kendi içindeki operasyonlar için kullanılır.
+    /// A special constructor method that creates an empty AdvancedBitmap canvas of the specified dimensions.
+    /// This method is used for operations within the class itself.
     /// </summary>
     private AdvancedBitmap(int width, int height)
     {
         this.Width = width;
         this.Height = height;
-        // MemoryPool'dan pikselleri tutacak kadar bellek kirala.
+        // Rent enough memory from the MemoryPool to hold the pixels.
         pixelMemoryOwner = MemoryPool<TPixel>.Shared.Rent(width * height);
         pixelMemory = pixelMemoryOwner.Memory;
     }
 
     /// <summary>
-    /// Başka bir AdvancedBitmap nesnesinin derin kopyasını oluşturan özel kurucu metot.
-    /// ICloneable arayüzünü uygularken kullanılır.
+    /// A special constructor method that creates a deep copy of another AdvancedBitmap object.
+    /// Used when implementing the ICloneable interface.
     /// </summary>
     private AdvancedBitmap(AdvancedBitmap<TPixel> source)
     {
@@ -80,21 +67,21 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
         this.Height = source.Height;
         pixelMemoryOwner = MemoryPool<TPixel>.Shared.Rent(Width * Height);
         pixelMemory = pixelMemoryOwner.Memory;
-        // Kaynak görüntünün piksel verilerini, yeni oluşturulan bu nesnenin belleğine kopyala.
+        // Copy the pixel data of the source image into the memory of this newly created object.
         source.pixelMemory.CopyTo(pixelMemory);
     }
 
 
+
     /// <summary>
-    /// Standart bir Bitmap nesnesinin piksel verilerini kendi hızlı bellek alanımıza yükler.
+    /// Loads the pixel data of a standard Bitmap object into our own fast memory space.
     /// </summary>
-    /// <param name="source">Kaynak Bitmap nesnesi.</param>
+    /// <param name="source">Source Bitmap object.</param>
     private unsafe void LoadFromBitmap(Bitmap source)
     {
         this.Width = source.Width;
         this.Height = source.Height;
 
-        // 2. Kendi piksellerimizi tutmak için MemoryPool'dan toplam piksel sayısı kadar bellek kirala.
         pixelMemoryOwner = MemoryPool<TPixel>.Shared.Rent(Width * Height);
         pixelMemory = pixelMemoryOwner.Memory;
 
@@ -121,9 +108,9 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
 
 
     /// <summary>
-    /// Mevcut piksel verilerini, ekranda gösterilebilecek standart bir System.Drawing.Bitmap nesnesine dönüştürür.
+    /// Converts the current pixel data into a standard System.Drawing.Bitmap object that can be displayed on the screen.
     /// </summary>
-    /// <returns>Piksel verilerini içeren yeni bir Bitmap nesnesi.</returns>
+    /// <returns>A new Bitmap object containing the pixel data.</returns>
     public unsafe Bitmap ToBitmap()
     {
         if (HasPendingChanges) Execute();
@@ -179,42 +166,51 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
     #endregion
 
     /// <summary>
-    /// Görüntünün belirtilen satırına, kopyalama yapmadan doğrudan erişim sağlayan bir Span döndürür.
-    /// Bu, tüm piksel işleme operasyonlarının temel yapı taşıdır.
+    /// Returns a Span that provides direct access to the specified row of the image without copying.
+    /// This is the fundamental building block of all pixel manipulation operations.
     /// </summary>
-    /// <param name="rowIndex">Erişilmek istenen satırın indeksi (Y koordinatı).</param>
-    /// <returns>Belirtilen satırı temsil eden bir Span<TPixel>.</returns>
+    /// <param name="rowIndex">The index (Y coordinate) of the row to be accessed.</param>
+    /// <returns>A Span<TPixel> representing the specified row.</returns>
     public Span<TPixel> GetRowSpan(int rowIndex)
     {
         return pixelMemory.Span.Slice(rowIndex * Width, Width);
     }
-
+    //public Span<TPixel> GetRowSpan(int rowIndex, Rectangle? ROI)
+    //{
+    //    var startIndex = ROI != null ? ROI.Value.Top : 0;
+    //    var finishIndex = ROI != null ? ROI.Value.Bottom : Width;
+    //    return pixelMemory.Span.Slice((startIndex + rowIndex) * finishIndex, finishIndex);
+    //}
     /// <summary>
-    /// Verilen bir 'processor' (işleyici) nesnesini, görüntünün her bir satırı üzerinde
-    /// paralel olarak çalıştırır. Bu, en yüksek performanslı işleme yöntemidir.
+    /// Runs a given 'processor' object in parallel on each row of the image.
+    /// This is the highest-performance processing method.
     /// </summary>
-    /// <typeparam name="TProcessor">IRowProcessor arayüzünü uygulayan struct tipindeki işleyici.</typeparam>
-    /// <param name="processor">Her satır için ProcessRow metodu çağrılacak olan işleyici nesne.</param>
-    public void ProcessRows<TProcessor>(TProcessor processor) where TProcessor : struct, IRowProcessor<TPixel>
+    /// <typeparam name="TProcessor">A struct-type handler that implements the IRowProcessor interface.</typeparam>
+    /// <param name="processor">The handler object whose ProcessRow method will be called for each row.</param>
+    /// <param name="roi">The Region of Interest to which the operation will be applied. If null, it will be applied to the entire image.</param>
+    public void ProcessRows<TProcessor>(TProcessor processor, Rectangle? roi = null) where TProcessor : struct, IRowProcessor<TPixel>
     {
-        Parallel.For(0, Height, y =>
+        var processArea = roi ?? new Rectangle(0, 0, this.Width, this.Height);
+        Parallel.For(processArea.Top, processArea.Bottom, y =>
         {
             var row = GetRowSpan(y);
-            processor.ProcessRow(row);
+
+            var roiRow = row.Slice(processArea.Left, processArea.Width);
+
+            processor.ProcessRow(roiRow);
         });
     }
 
 
-
-
-    #region Değişecek
+    #region Will Change
 
     /// <summary>
-    /// Görüntüye, belirli bir kernel (matris) kullanarak evrişim uygular.
-    /// Bu metot; bulanıklaştırma, netleştirme, kenar bulma gibi birçok filtrenin temelini oluşturur.
+    /// Applies convolution to the image using a specified kernel (matrix).
+    /// This method forms the basis of many filters such as blurring, sharpening, and edge detection.
     /// </summary>
-    /// <param name="kernel">Uygulanacak 2D evrişim matrisi (kernel).</param>
-    public void Convolve(float[,] kernel)
+    /// <param name="kernel">The 2D convolution matrix (kernel) to apply.</param>
+    /// <param name="roi">The Region of Interest to which the operation will be applied. If null, it will be applied to the entire image.</param>
+    public void Convolve(float[,] kernel, Rectangle? roi = null)
     {
 
         int kernelHeigth = kernel.GetLength(0);
@@ -226,19 +222,20 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
         var sourceBufferOwner = MemoryPool<TPixel>.Shared.Rent(Width * Height);
         var sourceMemory = sourceBufferOwner.Memory;
         pixelMemory.CopyTo(sourceMemory);
-
         var sourceSpan = sourceMemory.Span;
-
         var destSpan = pixelMemory.Span;
+
+        Rectangle processArea = roi ?? new Rectangle(0, 0, this.Width, this.Height);
+
         try
         {
-            Parallel.For(0, Height, y =>
+            Parallel.For(processArea.Top, processArea.Bottom, y =>
             {
                 var sourceSpan = sourceMemory.Span;
 
                 var destSpan = pixelMemory.Span;
 
-                for (int x = 0; x < Width; x++)
+                for (int x = processArea.Left; x < processArea.Right; x++)
                 {
                     float sumR = 0, sumG = 0, sumB = 0;
 
@@ -247,15 +244,16 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
 
                         for (int kx = 0; kx < kernelWidth; kx++)
                         {
-                            // Komşu pikselin koordinatını hesapla.
+
+                            // Calculate the coordinate of the neighboring pixel.
                             int pixelX = x + (kx - radiusX);
                             int pixelY = y + (ky - radiusX);
 
-                            // Kenar kontrolü: Eğer kernel resmin dışına taşıyorsa, en yakın kenar pikselini kullan.
+                            // Edge control: If the kernel extends beyond the image, use the nearest edge pixel.
                             pixelX = Math.Max(0, Math.Min(Width - 1, pixelX));
                             pixelY = Math.Max(0, Math.Min(Height - 1, pixelY));
 
-                            // Orijinal (kaynak) görüntüden komşu pikselin değerini ve kernel değerini al.
+                            //Get the value of neighbor pixel and kernel value from original (source) image.
                             var sourcePixel = sourceSpan[pixelY * Width + pixelX].ToRgba32();
                             float kernelValue = kernel[kx, ky];
 
@@ -264,9 +262,9 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
                             sumB += sourcePixel.B * kernelValue;
                         }
                     }
-                    // Orijinal alfa değerini koru.
+                    // Keep original alpha value.
                     var originalAlpha = sourceSpan[y * Width + x].ToRgba32().A;
-                    // Hesaplanan toplam değeri 0-255 arasına sıkıştırarak yeni pikseli oluştur.
+                    // Create the new pixel by compressing the calculated total value between 0 - 255.
                     var finalPixel = new Rgba32(
                         (byte)Math.Max(0, Math.Min(255, sumR)),
                         (byte)Math.Max(0, Math.Min(255, sumG)),
@@ -275,28 +273,26 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
                     destSpan[y * Width + x].FromRgba32(finalPixel);
 
                 }
-
-
-
             });
         }
         finally
         {
-            // İşimiz bitti, kiraladığımız geçici belleği havuza iade ediyoruz.
+            // Our work is done, we return the rented temporary memory to the pool.
             sourceBufferOwner.Dispose();
         }
 
 
     }
+
     #endregion
 
 
     /// <summary>
-    /// Verilen bir operasyonu hemen uygulamak yerine işlem kuyruğuna ekler.
-    /// Zincirleme kullanım için nesnenin kendisini döndürür.
+    /// Adds a given operation to the operation queue instead of immediately executing it.
+    /// Returns the object itself for chaining.
     /// </summary>
-    /// <param name="operation">Uygulanacak operasyon.</param>
-    /// <returns>Operasyon eklenmiş olan aynı AdvancedBitmap nesnesi.</returns>
+    /// <param name="operation">The operation to be performed.</param>
+    /// <returns>The same AdvancedBitmap object with the operation added.</returns>
     public AdvancedBitmap<TPixel> Apply(IOperation<TPixel> operation)
     {
         operationQueue.Add(operation);
@@ -305,21 +301,25 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
 
 
     /// <summary>
-    /// İşlem kuyruğunda bekleyen tüm operasyonları sırayla uygular.
-    /// Bu metot genellikle diğer metotlar tarafından dolaylı olarak çağrılır.
+    /// Executes all operations pending in the processing queue in order.
+    /// This method is usually called implicitly by other methods.
     /// </summary>
     private void Execute()
     {
-        // Eğer kuyrukta bekleyen bir işlem yoksa hiçbir şey yapma.
+        // If there is no operation waiting in the queue, do nothing.
         if (!HasPendingChanges) return;
 
-        // Tüm operasyon zincirini tek bir 'Geri Al' adımı olarak kaydetmek için
-        // işlemden önce mevcut durumu yığına it.
+        // To save the entire chain of operations as a single 'Undo' step,
+        // push the current state onto the stack before the operation.
         PushToUndoStack();
+        var context = new ProcessContext<TPixel>
+        {
+            SourceImage = this
+        };
 
         foreach (var oq in operationQueue)
         {
-            oq.Execute(this);
+            oq.Execute(context);
         }
         operationQueue.Clear();
 
@@ -328,20 +328,20 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
 
 
     /// <summary>
-    /// Görüntünün o anki durumunun bir kopyasını oluşturur ve Geri Al (Undo) yığınına ekler.
-    /// Yeni bir işlem yapıldığında İleri Al (Redo) geçmişi temizlenir.
+    /// Creates a copy of the current state of the image and adds it to the Undo stack.
+    /// The Redo history is cleared when a new operation is performed.
     /// </summary>
     public void PushToUndoStack()
     {
-        // Bellek havuzundan, mevcut piksel verilerini kopyalamak için yeni bir bellek alanı kirala.
+        // Rent a new memory space from the memory pool to copy the existing pixel data into.
         var historyOwner = MemoryPool<TPixel>.Shared.Rent(Width * Height);
         pixelMemory.CopyTo(historyOwner.Memory);
 
-        // Kopyanın sahibini (fişini) geri alma yığınına it.
+        // Push the owner (slip) of the copy to the undo stack.
         undoStack.Push(historyOwner);
 
-        // Yeni bir işlem zinciri başladığı için, artık ileri alınacak bir durum kalmamıştır.
-        // İleri alma yığınındaki tüm bellek alanlarını havuza geri iade ederek yığını temizle.
+        // Since a new chain of operations has begun, there is no more state to roll forward.
+        // Clear the stack by returning all memory in the roll forward stack to the pool.
         while (redoStack.Count > 0)
         {
             redoStack.Pop().Dispose();
@@ -349,52 +349,53 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
     }
 
 
+
     /// <summary>
-    /// Geri alınacak bir işlem olup olmadığını belirtir.
+    /// Indicates whether there is an operation to be undone.
     /// </summary>
     public bool CanUndo => undoStack.Count > 0;
 
     /// <summary>
-    /// Son yapılan işlemi geri alır.
+    /// Undoes the last action.
     /// </summary>
     public void Undo()
     {
         if (!CanUndo) return;
 
-        // Mevcut durumu, ileri alabilmek için _redoStack'e it.
+        // Push the current state to _redoStack to roll it forward.
         redoStack.Push(pixelMemoryOwner);
 
-        // _undoStack'ten bir önceki durumu çek ve onu aktif bellek yap.
+        // Fetch the previous state from _undoStack and make it the active memory.
         pixelMemoryOwner = undoStack.Pop();
         pixelMemory = pixelMemoryOwner.Memory;
     }
 
 
     /// <summary>
-    /// İleri alınacak bir işlem olup olmadığını belirtir.
+    /// Indicates whether a transaction needs to be rolled back.
     /// </summary>
     public bool CanRedo => redoStack.Count > 0;
 
     /// <summary>
-    /// Geri alınmış bir işlemi tekrar ileri alır.
+    /// Rolls back an undone transaction.
     /// </summary>
     public void Redo()
     {
         if (!CanRedo) return;
 
-        // Mevcut durumu, tekrar geri alabilmek için _undoStack'e it.
+        // Push the current state to _undoStack so you can undo it again.
         undoStack.Push(pixelMemoryOwner);
 
-        // _redoStack'ten bir sonraki durumu çek ve onu aktif bellek yap.
+        // Fetch the next state from _redoStack and make it the active memory.
         pixelMemoryOwner = redoStack.Pop();
         pixelMemory = pixelMemoryOwner.Memory;
     }
 
     /// <summary>
-    /// Mevcut AdvancedBitmap nesnesinin derin bir kopyasını (deep copy) oluşturur.
-    /// Piksel verileri yeni bir bellek alanına kopyalanır, böylece klon ve orijinal birbirinden bağımsız olur.
+    /// Creates a deep copy of the current AdvancedBitmap object.
+    /// Pixel data is copied to a new memory area, making the clone and the original independent of each other.
     /// </summary>
-    /// <returns>Bu nesnenin bir kopyası olan yeni bir nesne.</returns>
+    /// <returns>A new object that is a copy of this object.</returns>
     public object Clone()
     {
         return new AdvancedBitmap<TPixel>(this);
@@ -403,14 +404,15 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
 
     private bool disposed = false;
 
+
     /// <summary>
-    /// Sınıf tarafından kiralanan tüm bellek kaynaklarını MemoryPool'a iade eder.
+    /// Returns all memory resources leased by the class to the MemoryPool.
     /// </summary>
     public void Dispose()
     {
         Dispose(true);
-        // Bu nesne bizim tarafımızdan temizlendiği için, Çöp Toplayıcı'nın
-        // onu ayrıca temizlemeye çalışmasına gerek olmadığını bildiriyoruz. Bu bir optimizasyondur.
+        // Since this object has been cleaned up by us, we're letting the Garbage Collector know that
+        // it doesn't need to try to clean it up separately. This is an optimization.
         GC.SuppressFinalize(this);
     }
     protected virtual void Dispose(bool disposing)
@@ -421,7 +423,7 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
         }
         if (disposing)
         {
-            // Kiralanan tüm bellekleri havuza iade et.
+            // Return all leased memory to the pool.
             pixelMemoryOwner?.Dispose();
 
             while (undoStack.Count > 0)

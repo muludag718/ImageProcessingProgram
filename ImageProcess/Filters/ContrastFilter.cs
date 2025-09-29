@@ -16,11 +16,11 @@ public struct ContrastFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 
     public ContrastFilter() => Settings = new();
 
-    public readonly void Execute(AdvancedBitmap<Rgba32> image)
-    {
-        image.ProcessRows(this);
-    }
 
+    public void Execute(ProcessContext<Rgba32> context)
+    {
+        context.SourceImage.ProcessRows(this, context.ROI);
+    }
     public readonly void ProcessRow(Span<Rgba32> row)
     {
         double factor = (255.0 + Settings.ContrastFactory) / 255.0;
@@ -41,4 +41,6 @@ public struct ContrastFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 
         }
     }
+
+
 }
