@@ -28,20 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
-            açToolStripMenuItem = new ToolStripMenuItem();
-            açToolStripMenuItem1 = new ToolStripMenuItem();
-            farklıKaydetToolStripMenuItem = new ToolStripMenuItem();
+            TSMFile = new ToolStripMenuItem();
+            TSMOpenFile = new ToolStripMenuItem();
+            TSMSaveAs = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
-            çıkışToolStripMenuItem = new ToolStripMenuItem();
-            filtrelerToolStripMenuItem = new ToolStripMenuItem();
-            yardımToolStripMenuItem = new ToolStripMenuItem();
-            openFileDialog = new OpenFileDialog();
-            saveFileDialog = new SaveFileDialog();
+            TSMExit = new ToolStripMenuItem();
+            TSMFilter = new ToolStripMenuItem();
+            TSMHelper = new ToolStripMenuItem();
+            OpenFileDialog = new OpenFileDialog();
+            SaveFileDialog = new SaveFileDialog();
             splitContainer1 = new SplitContainer();
             pictureBoxOriginal = new PictureBox();
             pictureBoxProcessed = new PictureBox();
             PnlChild = new Panel();
+            TSMEdit = new ToolStripMenuItem();
+            TSMUndo = new ToolStripMenuItem();
+            TSMRedo = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -53,61 +57,59 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { açToolStripMenuItem, filtrelerToolStripMenuItem, yardımToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { TSMFile, TSMEdit, TSMFilter, TSMHelper });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(984, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
-            // açToolStripMenuItem
+            // TSMFile
             // 
-            açToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { açToolStripMenuItem1, farklıKaydetToolStripMenuItem, toolStripSeparator1, çıkışToolStripMenuItem });
-            açToolStripMenuItem.Name = "açToolStripMenuItem";
-            açToolStripMenuItem.Size = new Size(51, 20);
-            açToolStripMenuItem.Text = "Dosya";
+            TSMFile.DropDownItems.AddRange(new ToolStripItem[] { TSMOpenFile, TSMSaveAs, toolStripSeparator1, TSMExit });
+            TSMFile.Name = "TSMFile";
+            TSMFile.Size = new Size(37, 20);
+            TSMFile.Text = "File";
             // 
-            // açToolStripMenuItem1
+            // TSMOpenFile
             // 
-            açToolStripMenuItem1.Name = "açToolStripMenuItem1";
-            açToolStripMenuItem1.Size = new Size(180, 22);
-            açToolStripMenuItem1.Text = "Aç...";
-            açToolStripMenuItem1.Click += AçToolStripMenuItem1_Click;
+            TSMOpenFile.Name = "TSMOpenFile";
+            TSMOpenFile.Size = new Size(180, 22);
+            TSMOpenFile.Text = "Open...";
             // 
-            // farklıKaydetToolStripMenuItem
+            // TSMSaveAs
             // 
-            farklıKaydetToolStripMenuItem.Name = "farklıKaydetToolStripMenuItem";
-            farklıKaydetToolStripMenuItem.Size = new Size(180, 22);
-            farklıKaydetToolStripMenuItem.Text = "Farklı Kaydet";
-            farklıKaydetToolStripMenuItem.Click += FarklıKaydetToolStripMenuItem_Click;
+            TSMSaveAs.Name = "TSMSaveAs";
+            TSMSaveAs.Size = new Size(180, 22);
+            TSMSaveAs.Text = "Save As";
+
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
             toolStripSeparator1.Size = new Size(177, 6);
             // 
-            // çıkışToolStripMenuItem
+            // TSMExit
             // 
-            çıkışToolStripMenuItem.Name = "çıkışToolStripMenuItem";
-            çıkışToolStripMenuItem.Size = new Size(180, 22);
-            çıkışToolStripMenuItem.Text = "Çıkış";
-            çıkışToolStripMenuItem.Click += çıkışToolStripMenuItem_Click;
+            TSMExit.Name = "TSMExit";
+            TSMExit.Size = new Size(180, 22);
+            TSMExit.Text = "Exit";
             // 
-            // filtrelerToolStripMenuItem
+            // TSMFilter
             // 
-            filtrelerToolStripMenuItem.Name = "filtrelerToolStripMenuItem";
-            filtrelerToolStripMenuItem.Size = new Size(58, 20);
-            filtrelerToolStripMenuItem.Text = "Filtreler";
+            TSMFilter.Name = "TSMFilter";
+            TSMFilter.Size = new Size(50, 20);
+            TSMFilter.Text = "Filters";
             // 
-            // yardımToolStripMenuItem
+            // TSMHelper
             // 
-            yardımToolStripMenuItem.Name = "yardımToolStripMenuItem";
-            yardımToolStripMenuItem.Size = new Size(56, 20);
-            yardımToolStripMenuItem.Text = "Yardım";
+            TSMHelper.Name = "TSMHelper";
+            TSMHelper.Size = new Size(54, 20);
+            TSMHelper.Text = "Helper";
             // 
-            // openFileDialog
+            // OpenFileDialog
             // 
-            openFileDialog.FileName = "openFileDialog1";
+            OpenFileDialog.FileName = "openFileDialog1";
             // 
             // splitContainer1
             // 
@@ -154,6 +156,25 @@
             PnlChild.Size = new Size(200, 426);
             PnlChild.TabIndex = 2;
             // 
+            // TSMEdit
+            // 
+            TSMEdit.DropDownItems.AddRange(new ToolStripItem[] { TSMUndo, TSMRedo });
+            TSMEdit.Name = "TSMEdit";
+            TSMEdit.Size = new Size(39, 20);
+            TSMEdit.Text = "Edit";
+            // 
+            // TSMUndo
+            // 
+            TSMUndo.Name = "TSMUndo";
+            TSMUndo.Size = new Size(180, 22);
+            TSMUndo.Text = "Undo";
+            // 
+            // TSMRedo
+            // 
+            TSMRedo.Name = "TSMRedo";
+            TSMRedo.Size = new Size(180, 22);
+            TSMRedo.Text = "Redo";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -162,9 +183,10 @@
             Controls.Add(splitContainer1);
             Controls.Add(PnlChild);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Name = "MainForm";
-            Text = "MainForm";
+            Text = "Image Process";
             Load += MainForm_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
@@ -181,18 +203,21 @@
         #endregion
 
         private MenuStrip menuStrip1;
-        private OpenFileDialog openFileDialog;
-        private SaveFileDialog saveFileDialog;
+        private OpenFileDialog OpenFileDialog;
+        private SaveFileDialog SaveFileDialog;
         private SplitContainer splitContainer1;
         private PictureBox pictureBoxOriginal;
         private PictureBox pictureBoxProcessed;
-        private ToolStripMenuItem açToolStripMenuItem;
-        private ToolStripMenuItem açToolStripMenuItem1;
-        private ToolStripMenuItem farklıKaydetToolStripMenuItem;
+        private ToolStripMenuItem TSMFile;
+        private ToolStripMenuItem TSMOpenFile;
+        private ToolStripMenuItem TSMSaveAs;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem çıkışToolStripMenuItem;
-        private ToolStripMenuItem filtrelerToolStripMenuItem;
-        private ToolStripMenuItem yardımToolStripMenuItem;
+        private ToolStripMenuItem TSMExit;
+        private ToolStripMenuItem TSMFilter;
+        private ToolStripMenuItem TSMHelper;
         private Panel PnlChild;
+        private ToolStripMenuItem TSMEdit;
+        private ToolStripMenuItem TSMUndo;
+        private ToolStripMenuItem TSMRedo;
     }
 }
