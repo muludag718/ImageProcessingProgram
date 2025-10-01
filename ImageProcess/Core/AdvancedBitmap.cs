@@ -3,7 +3,6 @@ using ImageProcess.Core.Models;
 using System.Buffers;
 using System.Drawing.Imaging;
 
-
 namespace ImageProcess.Core;
 
 public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : struct, IPixel<TPixel>

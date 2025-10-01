@@ -7,8 +7,8 @@ namespace ImageProcess.Filters;
 
 public struct InvertFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "Renkleri Ters Çevir";
-    public readonly string Category => "Renk Ayarları";
+    public readonly string Name => "Invert Filter";
+    public readonly string Category => "Color Settings";
 
 
 

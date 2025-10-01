@@ -1,6 +1,7 @@
 ﻿using ImageProcess.Core;
 using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
+using ImageProcess.Filters;
 using ImageProcess.Utils;
 using System.Reflection;
 namespace ImageProcess.Forms;
@@ -65,6 +66,9 @@ public partial class MainForm : Form
     private void MainForm_Load(object sender, EventArgs e)
     {
         DiscoverFilters();
+
+        availableFilters.Add(new ContrastFilter());
+
         BuildFilterMenu();
         var rectangleSelector = new RectangleSelector(pictureBoxOriginal);
         rectangleSelector.SelectionCompleted += (s, rect) =>
@@ -239,4 +243,11 @@ public partial class MainForm : Form
 
         return imageRect;
     }
+
+
+
+
+
+
+
 }

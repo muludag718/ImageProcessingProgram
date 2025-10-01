@@ -10,6 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Filters\Blur\" />
+    <Folder Include="Filters\ColorSettings\" />
+    <Folder Include="Filters\Detail\" />
     <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>

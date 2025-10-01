@@ -24,10 +24,9 @@ public class RectangleSelector
     {
         if (selectionRectangle.Width > 0 && selectionRectangle.Height > 0)
         {
-            using (var selectionPen = new Pen(Color.Red))
-            {
-                e.Graphics.DrawRectangle(selectionPen, selectionRectangle);
-            }
+            using var selectionPen = new Pen(Color.Red);
+
+            e.Graphics.DrawRectangle(selectionPen, selectionRectangle);
         }
     }
 
