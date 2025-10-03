@@ -66,9 +66,6 @@ public partial class MainForm : Form
     private void MainForm_Load(object sender, EventArgs e)
     {
         DiscoverFilters();
-
-        availableFilters.Add(new ContrastFilter());
-
         BuildFilterMenu();
         var rectangleSelector = new RectangleSelector(pictureBoxOriginal);
         rectangleSelector.SelectionCompleted += (s, rect) =>
@@ -194,9 +191,9 @@ public partial class MainForm : Form
 
     private void DiscoverFilters()
     {
-        availableFilters = [.. Assembly.GetExecutingAssembly().GetTypes()
-            .Where(t => typeof(IFilter<Rgba32>).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-            .Select(t => (IFilter<Rgba32>?) Activator.CreateInstance(t))];
+        availableFilters =[..Assembly.GetExecutingAssembly().GetTypes()
+        .Where(t => typeof(IFilter<Rgba32>).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+        .Select(t => (IFilter<Rgba32>?)Activator.CreateInstance(t))];
     }
 
     /// <summary>

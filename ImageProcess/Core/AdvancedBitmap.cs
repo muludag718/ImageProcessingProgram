@@ -189,7 +189,12 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
     /// <param name="roi">The Region of Interest to which the operation will be applied. If null, it will be applied to the entire image.</param>
     public void ProcessRows<TProcessor>(TProcessor processor, Rectangle? roi = null) where TProcessor : struct, IRowProcessor<TPixel>
     {
-        var processArea = roi ?? new Rectangle(0, 0, this.Width, this.Height);
+        Rectangle processArea;
+        if (roi == null || roi?.Width == 0 || roi?.Height == 0)
+            processArea = new Rectangle(0, 0, this.Width, this.Height);
+        else
+            processArea = roi ?? new Rectangle(0, 0, this.Width, this.Height);
+
         Parallel.For(processArea.Top, processArea.Bottom, y =>
         {
             var row = GetRowSpan(y);
@@ -199,6 +204,15 @@ public class AdvancedBitmap<TPixel> : ICloneable, IDisposable where TPixel : str
             processor.ProcessRow(roiRow);
         });
     }
+
+    private bool RoiCheck(Rectangle? roi)
+    {
+        if (roi == null) return false;
+        if (roi?.Width == 0 || roi?.Height == 0) return false;
+        return true;
+    }
+
+
 
 
     #region Will Change
