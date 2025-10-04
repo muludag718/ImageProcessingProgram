@@ -2,13 +2,13 @@
 using ImageProcess.Core.Models;
 
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.ColorSettings;
 
 public class AutoContrastFilter : IFilter<Rgba32>
 {
-    public string Name => "AutoContrastFilter";
+    public string Name => "Auto Contrast";
 
-    public string Category => "Filter";
+    public string Category => "Color";
 
     public void Execute(ProcessContext<Rgba32> context)
     {
@@ -46,9 +46,9 @@ public class AutoContrastFilter : IFilter<Rgba32>
             {
                 var pixel = row[x];
 
-                double newR_double = ((pixel.R - minParlaklik) / range) * 255.0;
-                double newG_double = ((pixel.G - minParlaklik) / range) * 255.0;
-                double newB_double = ((pixel.B - minParlaklik) / range) * 255.0;
+                double newR_double = (pixel.R - minParlaklik) / range * 255.0;
+                double newG_double = (pixel.G - minParlaklik) / range * 255.0;
+                double newB_double = (pixel.B - minParlaklik) / range * 255.0;
 
                 byte newR = (byte)Math.Clamp(newR_double, 0, 255);
                 byte newG = (byte)Math.Clamp(newG_double, 0, 255);

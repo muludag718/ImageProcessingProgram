@@ -5,7 +5,7 @@ namespace ImageProcess.Filters.ColorSettings.Settings;
 /// <summary>
 /// Constras Factor Value
 /// </summary>
-public class ContrastSetting
+public class ContrastSettings
 {
     [Category("Parameters")]
     [DisplayName("Contrast Amount")]

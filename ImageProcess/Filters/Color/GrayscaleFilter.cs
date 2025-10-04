@@ -7,8 +7,8 @@ namespace ImageProcess.Filters.ColorSettings;
 
 public struct GrayscaleFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "Grayscale Filter";
-    public readonly string Category => "Color Settings";
+    public readonly string Name => "Grayscale";
+    public readonly string Category => "Color";
 
     public void Execute(ProcessContext<Rgba32> context)
     {

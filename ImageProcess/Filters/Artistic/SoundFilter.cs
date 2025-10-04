@@ -1,20 +1,14 @@
-﻿using ImageProcess.Core;
-using ImageProcess.Core.Interfaces;
+﻿using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
-namespace ImageProcess.Filters;
+
+namespace ImageProcess.Filters.Artistic;
 
 public struct SoundFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "Sound(Gürültü)";
+    public readonly string Name => "Add Noise...";
 
-    public readonly string Category => "Filter";
+    public readonly string Category => "Artistic";
 
     public readonly void Execute(ProcessContext<Rgba32> context)
     {

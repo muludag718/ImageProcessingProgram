@@ -7,8 +7,8 @@ namespace ImageProcess.Filters.ColorSettings;
 
 public struct InvertFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "Invert Filter";
-    public readonly string Category => "Color Settings";
+    public readonly string Name => "Invert";
+    public readonly string Category => "Color";
 
 
 

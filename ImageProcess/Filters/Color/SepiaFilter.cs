@@ -5,9 +5,9 @@ namespace ImageProcess.Filters.ColorSettings;
 
 public struct SepiaFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "Sepia Filter";
+    public readonly string Name => "Sepia";
 
-    public readonly string Category => "Color Settings";
+    public readonly string Category => "Color";
 
     public readonly void Execute(ProcessContext<Rgba32> context)
     {

@@ -2,12 +2,12 @@
 using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.Artistic;
 
 public struct BinaryFilter : IFilter<Rgba32>
 {
-    public readonly string Name => "Binary";
-    public readonly string Category => "Renk Ayarları";
+    public readonly string Name => "Binary Threshold...";
+    public readonly string Category => "Artistic";
 
     public readonly void Execute(ProcessContext<Rgba32> context)
     {

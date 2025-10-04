@@ -5,7 +5,7 @@ namespace ImageProcess.Filters.Detail;
 
 public struct SharpenFilter : IFilter<Rgba32>
 {
-    public readonly string Name => "Sharpen Filter";
+    public readonly string Name => "Sharpen";
 
     public readonly string Category => "Detail";
 

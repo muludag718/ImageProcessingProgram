@@ -2,13 +2,13 @@
 using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.Color;
 
 public struct GamaFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "GamaFilter";
+    public readonly string Name => "Gamma Correction...";
 
-    public readonly string Category => "Filter";
+    public readonly string Category => "Color";
 
     public readonly void Execute(ProcessContext<Rgba32> context)
     {

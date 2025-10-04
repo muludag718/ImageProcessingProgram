@@ -5,9 +5,9 @@ namespace ImageProcess.Filters.BinaryOperations;
 
 public class AddImagesFilter : IMultiImageFilter<Rgba32>
 {
-    public string Name => "Collect Pictures...";
+    public string Name => "Add Image...";
 
-    public string Category => "Image Operations";
+    public string Category => "Binary Operations";
 
     public void Execute(ProcessContext<Rgba32> context)
     {

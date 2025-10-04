@@ -7,11 +7,11 @@ namespace ImageProcess.Filters.ColorSettings;
 
 public struct ContrastFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
-    public readonly string Name => "ContrastFilter";
+    public readonly string Name => "Contrast...";
 
-    public readonly string Category => "Filter";
+    public readonly string Category => "Color";
 
-    public ContrastSetting Settings { get; private set; }
+    public ContrastSettings Settings { get; private set; }
 
     public ContrastFilter() => Settings = new();
 
