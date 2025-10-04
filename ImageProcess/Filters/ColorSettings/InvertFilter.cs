@@ -3,7 +3,7 @@ using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
 
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.ColorSettings;
 
 public struct InvertFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {

@@ -1,8 +1,6 @@
-﻿
+﻿using System.ComponentModel;
 
-using System.ComponentModel;
-
-namespace ImageProcess.Filters.Settings;
+namespace ImageProcess.Filters.ColorSettings.Settings;
 
 /// <summary>
 /// Constras Factor Value

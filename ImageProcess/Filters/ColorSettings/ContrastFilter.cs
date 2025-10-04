@@ -1,10 +1,9 @@
-﻿
-using ImageProcess.Core;
+﻿using ImageProcess.Core;
 using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
-using ImageProcess.Filters.Settings;
+using ImageProcess.Filters.ColorSettings.Settings;
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.ColorSettings;
 
 public struct ContrastFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {
@@ -29,9 +28,9 @@ public struct ContrastFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
         {
             var pixel = row[x];
 
-            var R = (int)((((pixel.R / 255.0) - 0.5) * factor + 0.5) * 255.0);
-            var G = (int)((((pixel.G / 255.0) - 0.5) * factor + 0.5) * 255.0);
-            var B = (int)((((pixel.B / 255.0) - 0.5) * factor + 0.5) * 255.0);
+            var R = (int)(((pixel.R / 255.0 - 0.5) * factor + 0.5) * 255.0);
+            var G = (int)(((pixel.G / 255.0 - 0.5) * factor + 0.5) * 255.0);
+            var B = (int)(((pixel.B / 255.0 - 0.5) * factor + 0.5) * 255.0);
 
             byte byteR = (byte)Math.Min(255, Math.Max(0, R));
             byte byteG = (byte)Math.Min(255, Math.Max(0, G));

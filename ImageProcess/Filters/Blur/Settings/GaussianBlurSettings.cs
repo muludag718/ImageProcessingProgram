@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace ImageProcess.Filters.Settings;
+namespace ImageProcess.Filters.Blur.Settings;
 
 public class GaussianBlurSettings
 {

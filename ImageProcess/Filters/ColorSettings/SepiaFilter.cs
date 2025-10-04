@@ -1,7 +1,7 @@
 ﻿using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.ColorSettings;
 
 public struct SepiaFilter : IFilter<Rgba32>, IRowProcessor<Rgba32>
 {

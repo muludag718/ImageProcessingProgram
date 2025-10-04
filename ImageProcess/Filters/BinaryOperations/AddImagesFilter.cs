@@ -1,7 +1,7 @@
 ﻿using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.BinaryOperations;
 
 public class AddImagesFilter : IMultiImageFilter<Rgba32>
 {

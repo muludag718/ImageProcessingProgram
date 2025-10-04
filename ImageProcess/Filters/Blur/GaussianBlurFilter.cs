@@ -1,8 +1,8 @@
 ﻿using ImageProcess.Core.Interfaces;
 using ImageProcess.Core.Models;
-using ImageProcess.Filters.Settings;
+using ImageProcess.Filters.Blur.Settings;
 
-namespace ImageProcess.Filters;
+namespace ImageProcess.Filters.Blur;
 
 public struct GaussianBlurFilter : IFilter<Rgba32>
 {
