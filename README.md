@@ -121,4 +121,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 **Muludag**
 
-* GitHub: `[github.com/muludag718]([https://github.com/muludag718])`
+* GitHub: [github.com/muludag718]([https://github.com/muludag718])
