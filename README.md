@@ -9,21 +9,6 @@ PixelCraft is an advanced image processing application and framework built with 
 
 ---
 
-## 📸 Screenshots
-
-***(Important: Replace the images below with real screenshots of your application!)***
-
-<p align="center">
-  <img src="https://i.imgur.com/x5zUa2p.png" alt="Main UI" width="600">
-  <br><em>Main UI with side-by-side comparison and Region of Interest (ROI) selection.</em>
-</p>
-<p align="center">
-  <img src="https://i.imgur.com/vHqJ9C2.png" alt="Dynamic Settings Panel" width="300">
-  <br><em>Dynamically generated settings panel using PropertyGrid for parameterized filters.</em>
-</p>
-
----
-
 ## ✨ Features
 
 ### Core Functionality
